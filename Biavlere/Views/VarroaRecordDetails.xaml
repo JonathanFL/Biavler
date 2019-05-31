@@ -1,0 +1,21 @@
+﻿<Window x:Class="Biavlere.Views.VarroaRecordDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biavlere.Views"
+        mc:Ignorable="d"
+        Title="Bemærkninger" Height="120" Width="270"
+        WindowStartupLocation="Manual" 
+        Left="500" Top="250">
+    <Grid>
+
+        <TextBox
+            Text="{Binding Path=Comments}"
+            Margin="10 35 10 10"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto"
+            AcceptsReturn="True"/>
+
+    </Grid>
+</Window>

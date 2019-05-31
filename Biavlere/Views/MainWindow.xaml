@@ -1,0 +1,223 @@
+﻿<Window x:Class="Biavlere.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biavlere.Views"
+        xmlns:viewModels="clr-namespace:Biavlere.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactivity="http://prismlibrary.com/"
+        mc:Ignorable="d"
+        Title="Varroa Log" FontFamily="Berlin Sans FB" Height="450" Width="800">
+
+
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.4*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Column="1" 
+                Grid.Row="2"
+                Margin="0px 20px 0px 0px"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Content="Tilføj"
+                FontSize="18"
+                Background="{DynamicResource ButtonBrush}"
+                Command="{Binding Path=AddNewRecord}"
+                Style="{StaticResource RoundCorner}">
+        </Button>
+
+
+        <!--<Button Grid.Column="1" 
+                Grid.Row="4"
+                Margin="0px 20px 0px 0px"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Content="Reset"
+                FontSize="18"
+                Style="{StaticResource RoundCorner}"
+                Command="{Binding ResetDataGrid}">
+        </Button>-->
+
+        <Button Grid.Column="1" 
+                Grid.Row="3"
+                Margin="0px 20px 0px 0px"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Content="Visualisering"
+                FontSize="18"
+                Style="{StaticResource RoundCorner}">
+        </Button>
+
+        <Button Grid.Column="1" 
+                Grid.Row="6"
+                Margin="0px 20px 0px 0px"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Content="Hjælp"
+                FontSize="18"
+                Style="{StaticResource RoundCorner}">
+        </Button>
+
+
+
+        <Viewbox HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="50">
+            <TextBlock Text="DinBi - Hjælp til biavlere" Grid.Row="1"
+               Grid.Column="1"
+               Grid.ColumnSpan="5"
+               FontSize="22"
+               FontFamily="Broadway"
+               TextAlignment="Center"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"></TextBlock>
+        </Viewbox>
+
+        <Button 
+            Grid.Column="4" Grid.Row="1"
+            Width="60"
+            Height="20"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left"
+            Margin="10 0 0 10"
+            Content="Søg"
+            FontSize="14"
+            Style="{StaticResource RoundCorner}"
+            Command="{Binding SearchCommand}" 
+            CommandParameter="{Binding Text, ElementName=SearchTextBox}">
+        </Button>
+
+
+        <TextBox Grid.Column="5" Grid.Row="1"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center"
+            Margin="0 0 0 8"
+            Height="25"
+            Name="SearchTextBox"
+            FontSize="18"
+            TextAlignment="Center"
+            Width="115">
+
+        </TextBox>
+
+        <Button Grid.Column="6" Grid.Row="1"
+            Width="60"
+            Height="20"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left"
+            Margin="10 0 0 10"
+            Content="Reset"
+            FontSize="14"
+            Style="{StaticResource RoundCorner}"
+            Command="{Binding ResetDataGrid}"
+            IsEnabled="{Binding CanReset}">
+        </Button>
+
+        <DataGrid ItemsSource="{Binding Path=VarroaRecords}"
+                  SelectedItem="{Binding Path=CurrentVarroaCount, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedIndex="{Binding Path=CurrentIndex}"
+                  Grid.Column="3"
+                  Grid.Row="2"
+                  Grid.ColumnSpan="4"
+                  Grid.RowSpan="5"
+                  AlternatingRowBackground="#CCCCFF"
+                  AutoGenerateColumns="False"
+                  FontSize="16"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Bistad" Width="3*" Binding="{Binding BistadId}"/>
+                <DataGridTextColumn Header="Dato" Width="1.8*" Binding="{Binding OptaellingsDato,StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                <DataGridTextColumn Header="Antal" Width="0.8*" Binding="{Binding NumberOfVarroaMites}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Bemærkning" Width="2*" Binding="{Binding Comment}" />
+            </DataGrid.Columns>
+
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <interactivity:InvokeCommandAction Command="{Binding SelectedRecordDetailsCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </DataGrid>
+
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="7" Grid.Column="0">
+            <MenuItem Header="_File">
+                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                    <MenuItem.Header>
+                        <TextBlock FontFamily="none">Open</TextBlock>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        Folder
+                    </MenuItem.Icon>
+                    <MenuItem.InputGestureText>
+                        ctrl + o
+                    </MenuItem.InputGestureText>
+                </MenuItem>
+                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                    <MenuItem.Header>
+                        <TextBlock FontFamily="none">Save</TextBlock>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        Save
+                    </MenuItem.Icon>
+                    <MenuItem.InputGestureText>
+                        ctrl + s
+                    </MenuItem.InputGestureText>
+                </MenuItem>
+                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                    <MenuItem.Header>
+                        <TextBlock FontFamily="none">Save As</TextBlock>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        Save
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem FontFamily="{StaticResource FontAwesome}"
+                          Command="{Binding Path=CloseApplicationCommand}">
+                    <MenuItem.Header>
+                        <TextBlock FontFamily="none">Exit</TextBlock>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        times
+                    </MenuItem.Icon>
+                    <MenuItem.InputGestureText>
+                        alt + f4
+                    </MenuItem.InputGestureText>
+                </MenuItem>
+            </MenuItem>
+            
+        </Menu>
+
+
+    </Grid>
+</Window>
