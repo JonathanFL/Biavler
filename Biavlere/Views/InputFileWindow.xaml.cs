@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Biavlere.View
+namespace Biavlere.Views
 {
     /// <summary>
     /// Interaction logic for InputFileWindow.xaml

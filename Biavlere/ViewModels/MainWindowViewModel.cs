@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using Biavlere.Model;
-using Biavlere.View;
 using Biavlere.Views;
 using Prism.Commands;
 using Prism.Mvvm;
