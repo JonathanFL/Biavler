@@ -8,6 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:interactivity="http://prismlibrary.com/"
         mc:Ignorable="d"
+        Icon="../bee.ico"
         Title="Varroa Log" FontFamily="Berlin Sans FB" Height="450" Width="800">
 
 
@@ -51,16 +52,7 @@
         </Button>
 
 
-        <!--<Button Grid.Column="1" 
-                Grid.Row="4"
-                Margin="0px 20px 0px 0px"
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch"
-                Content="Reset"
-                FontSize="18"
-                Style="{StaticResource RoundCorner}"
-                Command="{Binding ResetDataGrid}">
-        </Button>-->
+        
 
         <Button Grid.Column="1" 
                 Grid.Row="3"
@@ -71,6 +63,20 @@
                 FontSize="18"
                 Style="{StaticResource RoundCorner}">
         </Button>
+
+        <Button Grid.Column="1" 
+                Grid.Row="4"
+                Margin="0px 20px 0px 0px"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Content="Gem"
+                FontSize="18"
+                Style="{StaticResource RoundCorner}"
+                Command="{Binding SaveCommand}">
+        </Button>
+
+
+
 
         <Button Grid.Column="1" 
                 Grid.Row="6"
@@ -131,8 +137,7 @@
             Content="Reset"
             FontSize="14"
             Style="{StaticResource RoundCorner}"
-            Command="{Binding ResetDataGrid}"
-            IsEnabled="{Binding CanReset}">
+            Command="{Binding ResetDataGrid}">
         </Button>
 
         <DataGrid ItemsSource="{Binding Path=VarroaRecords}"
@@ -157,7 +162,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Bemærkning" Width="2*" Binding="{Binding Comment}" />
+                <DataGridTextColumn Header="Bemærkning" Width="1.6*" Binding="{Binding Comment}" />
             </DataGrid.Columns>
 
 
@@ -172,9 +177,9 @@
 
         <Menu Grid.Row="0" Grid.ColumnSpan="7" Grid.Column="0">
             <MenuItem Header="_File">
-                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                <MenuItem Command="{Binding OpenFileCommand}" FontFamily="{StaticResource FontAwesome}">
                     <MenuItem.Header>
-                        <TextBlock FontFamily="none">Open</TextBlock>
+                        <TextBlock FontFamily="none">Åben</TextBlock>
                     </MenuItem.Header>
                     <MenuItem.Icon>
                         Folder
@@ -185,7 +190,7 @@
                 </MenuItem>
                 <MenuItem FontFamily="{StaticResource FontAwesome}">
                     <MenuItem.Header>
-                        <TextBlock FontFamily="none">Save</TextBlock>
+                        <TextBlock FontFamily="none">Gem</TextBlock>
                     </MenuItem.Header>
                     <MenuItem.Icon>
                         Save
@@ -194,9 +199,9 @@
                         ctrl + s
                     </MenuItem.InputGestureText>
                 </MenuItem>
-                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                <MenuItem Command="{Binding SaveAsFileCommand}" FontFamily="{StaticResource FontAwesome}">
                     <MenuItem.Header>
-                        <TextBlock FontFamily="none">Save As</TextBlock>
+                        <TextBlock FontFamily="none">Gem som</TextBlock>
                     </MenuItem.Header>
                     <MenuItem.Icon>
                         Save
@@ -205,7 +210,7 @@
                 <MenuItem FontFamily="{StaticResource FontAwesome}"
                           Command="{Binding Path=CloseApplicationCommand}">
                     <MenuItem.Header>
-                        <TextBlock FontFamily="none">Exit</TextBlock>
+                        <TextBlock FontFamily="none">Luk</TextBlock>
                     </MenuItem.Header>
                     <MenuItem.Icon>
                         times

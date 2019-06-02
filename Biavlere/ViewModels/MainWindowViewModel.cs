@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using Biavlere.Model;
+using Biavlere.View;
 using Biavlere.Views;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -19,7 +22,13 @@ namespace Biavlere.ViewModels
         private VarroaCount _currentVarroaCount = null;
         private List<VarroaCount> temp;
 
-        public ObservableCollection<VarroaCount> VarroaRecords => _varroaRecords;
+        private string filename;
+
+        public ObservableCollection<VarroaCount> VarroaRecords
+        { 
+            get => _varroaRecords;
+            set => SetProperty(ref _varroaRecords, value);
+        }
 
 
         public MainWindowViewModel()
@@ -127,11 +136,11 @@ namespace Biavlere.ViewModels
 
         public ICommand SearchCommand =>
             _searchCommand ?? (_searchCommand = new
-                DelegateCommand<String>(SearchCommand_Execute));
+                DelegateCommand<String>(SearchCommand_Execute).ObservesProperty(() => CanReset));
 
         private void SearchCommand_Execute(string bistadId)
         {
-            _canReset = true;
+            CanReset = true;
 
             temp = new List<VarroaCount>(_varroaRecords);
 
@@ -150,7 +159,12 @@ namespace Biavlere.ViewModels
 
         public ICommand ResetDataGrid =>
             _resetDataGrid ?? (_resetDataGrid = new
-                DelegateCommand(ResetDataGridCommand_Execute));
+                DelegateCommand(ResetDataGridCommand_Execute,CanExecuteReset).ObservesProperty(() => CanReset));
+
+        private bool CanExecuteReset()
+        {
+            return CanReset;
+        }
 
         private void ResetDataGridCommand_Execute()
         {
@@ -159,6 +173,94 @@ namespace Biavlere.ViewModels
             {
                 _varroaRecords.Add(varroaCount);
             }
+
+            CanReset = false;
         }
+
+
+        #region SaveAsFileCommand
+
+        
+        ICommand _saveAsFileCommand;
+        
+
+        public ICommand SaveAsFileCommand => 
+            _saveAsFileCommand ?? (_saveAsFileCommand = new DelegateCommand(SaveAsFileCommand_Execute));
+
+        private void SaveAsFileCommand_Execute()
+        {
+            var vm = new InputFileWindowViewModel(ref _varroaRecords, "Gem");
+
+            var dlg = new InputFileWindow
+            {
+                DataContext = vm
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+
+            }
+        }
+
+        #endregion
+
+
+        #region SaveFileCommand
+            
+
+
+        ICommand _SaveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return _SaveCommand ?? (_SaveCommand = new DelegateCommand(SaveFileCommand_Execute, SaveFileCommand_CanExecute)
+                           .ObservesProperty(() => VarroaRecords.Count));
+            }
+        }
+
+        private void SaveFileCommand_Execute()
+        {
+            // Create an instance of the XmlSerializer class and specify the type of object to serialize.
+            XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<VarroaCount>));
+            TextWriter writer = new StreamWriter("test.txt");
+            // Serialize all the agents.
+            serializer.Serialize(writer, VarroaRecords);
+            writer.Close();
+        }
+
+        private bool SaveFileCommand_CanExecute()
+        {
+            return true; //(filename != "") && (VarroaRecords.Count > 0);
+        }
+
+        #endregion
+
+
+        #region OpenFileCommand
+
+        ICommand _OpenFileCommand;
+        public ICommand OpenFileCommand
+        {
+            get { return _OpenFileCommand ?? (_OpenFileCommand = new DelegateCommand<string>(OpenFileCommand_Execute)); }
+        }
+
+        private void OpenFileCommand_Execute(string argFilename)
+        {
+            var vm = new InputFileWindowViewModel(ref _varroaRecords, "Åben");
+
+            var dlg = new InputFileWindow
+            {
+                DataContext = vm
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+
+            }
+        }
+
+        #endregion
+
     }
 }

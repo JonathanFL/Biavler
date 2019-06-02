@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Biavlere.Views"
         mc:Ignorable="d"
-        Title="Bemærkninger" Height="120" Width="270"
+        Title="{Binding Path=Title}" Height="120" Width="270"
         WindowStartupLocation="Manual" 
         Left="500" Top="250">
     <Grid>

@@ -71,11 +71,19 @@
     <Compile Include="AutoFocusBehavior.cs" />
     <Compile Include="DialogCloser.cs" />
     <Compile Include="ViewModels\AddCountViewModel.cs" />
+    <Compile Include="ViewModels\InputFileWindowViewModel.cs" />
+    <Compile Include="Views\InputFileWindow.xaml.cs">
+      <DependentUpon>InputFileWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\VarroaRecordDetailsViewModel.cs" />
     <Compile Include="Views\VarroaRecordDetails.xaml.cs">
       <DependentUpon>VarroaRecordDetails.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\InputFileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddCountWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +139,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="bee.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

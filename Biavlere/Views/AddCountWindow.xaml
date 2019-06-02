@@ -112,7 +112,7 @@
                 Margin="5,5,8,5"
                 Command="{Binding Path=SaveBtnCommand}"
                 IsCancel="True"
-                biavlere:DialogCloser.DialogResult=""/>
+                />
 
         <Button Name="BtnCancel"
                 Grid.Row="4"

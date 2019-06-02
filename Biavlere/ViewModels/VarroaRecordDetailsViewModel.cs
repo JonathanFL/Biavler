@@ -11,8 +11,10 @@ namespace Biavlere.ViewModels
     class VarroaRecordDetailsViewModel : BindableBase
     {
         public string Comments { get; set; }
+        public string Title;
         public VarroaRecordDetailsViewModel(ref VarroaCount varroaCount)
         {
+            Title = "Bemærkninger for Bistad: " + varroaCount.BistadId;
             Comments = varroaCount.Comment;
         }
 

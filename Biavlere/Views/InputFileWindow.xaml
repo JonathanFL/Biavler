@@ -1,0 +1,17 @@
+﻿<Window x:Class="Biavlere.View.InputFileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biavlere.View"
+        Icon="../bee.ico"
+        mc:Ignorable="d"
+        Title="InputFileWindow" Height="150" Width="300">
+    <Grid>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" FontSize="18" Text="Angiv filnavn:" HorizontalAlignment="Center" Margin="0 0 79 0"></TextBlock>
+            <TextBox Name="filenameTextBox" Width="182" Height="25" DockPanel.Dock="Top" FontSize="18" Margin="0 10 0 0" VerticalAlignment="Top"></TextBox>
+            <Button Command="{Binding SaveAsCommand}" CommandParameter="{Binding ElementName=filenameTextBox, Path=Text}" DockPanel.Dock="Bottom" Width="80" Height="20" Content="{Binding Type}"></Button>
+        </DockPanel>
+    </Grid>
+</Window>
