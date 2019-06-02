@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:Biavlere.Views"
         Icon="../bee.ico"
         mc:Ignorable="d"
+        WindowStartupLocation="Manual" 
+        Left="500" Top="250"
         Title="InputFileWindow" Height="150" Width="300">
     <Grid>
         <DockPanel>

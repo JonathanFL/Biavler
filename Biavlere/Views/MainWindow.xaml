@@ -9,6 +9,8 @@
         xmlns:interactivity="http://prismlibrary.com/"
         mc:Ignorable="d"
         Icon="../bee.ico"
+        WindowStartupLocation="CenterScreen" 
+        
         Title="Varroa Log" FontFamily="Berlin Sans FB" Height="450" Width="800">
 
 
@@ -16,6 +18,15 @@
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
 
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SaveCommand}" 
+                    Key="S"
+                    Modifiers="Control"/>
+        <KeyBinding Command="{Binding OpenFileCommand}" 
+                    Key="O"
+                    Modifiers="Control"/>
+    </Window.InputBindings>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -52,7 +63,7 @@
         </Button>
 
 
-        
+
 
         <Button Grid.Column="1" 
                 Grid.Row="3"
@@ -61,7 +72,8 @@
                 VerticalAlignment="Stretch"
                 Content="Visualisering"
                 FontSize="18"
-                Style="{StaticResource RoundCorner}">
+                Style="{StaticResource RoundCorner}"
+                Command="{Binding Path=VisualizationCommand}">
         </Button>
 
         <Button Grid.Column="1" 
@@ -175,7 +187,7 @@
         </DataGrid>
 
 
-        <Menu Grid.Row="0" Grid.ColumnSpan="7" Grid.Column="0">
+        <Menu Grid.Row="0" Grid.ColumnSpan="8" Grid.Column="0">
             <MenuItem Header="_File">
                 <MenuItem Command="{Binding OpenFileCommand}" FontFamily="{StaticResource FontAwesome}">
                     <MenuItem.Header>
@@ -188,7 +200,7 @@
                         ctrl + o
                     </MenuItem.InputGestureText>
                 </MenuItem>
-                <MenuItem FontFamily="{StaticResource FontAwesome}">
+                <MenuItem Command="{Binding SaveCommand}" FontFamily="{StaticResource FontAwesome}">
                     <MenuItem.Header>
                         <TextBlock FontFamily="none">Gem</TextBlock>
                     </MenuItem.Header>
@@ -220,7 +232,7 @@
                     </MenuItem.InputGestureText>
                 </MenuItem>
             </MenuItem>
-            
+
         </Menu>
 
 

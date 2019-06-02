@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Biavlere.Views"
         mc:Ignorable="d"
+        Icon="../bee.ico"
         Title="{Binding Path=Title}" Height="120" Width="270"
         WindowStartupLocation="Manual" 
         Left="500" Top="250">
     <Grid>
-
+        <TextBlock FontSize="14" Margin="10 0 0 0">Bemærkninger:</TextBlock>
         <TextBox
             Text="{Binding Path=Comments}"
             Margin="10 35 10 10"

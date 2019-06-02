@@ -21,7 +21,10 @@ namespace Biavlere.ViewModels
         private VarroaCount _currentVarroaCount = null;
         private List<VarroaCount> temp;
 
-        private string filename;
+        private bool _alreadySearched = false;
+        private bool _justOpened = true;
+
+        private string filename = "test.txt";
 
         public ObservableCollection<VarroaCount> VarroaRecords
         { 
@@ -34,13 +37,12 @@ namespace Biavlere.ViewModels
         {
             _varroaRecords = new ObservableCollection<VarroaCount>();
 
-            _varroaRecords.Add(new VarroaCount("ASDFGHJKLÆØQWERTYU", DateTime.Now, 12, "Det var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("AX432", DateTime.Now, 12, "Det var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("ASD", DateTime.Now, 12, "Det hej hej hej ehj var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("AX432", DateTime.Now, 12, "Det var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("ASD", DateTime.Now, 12, "Det var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("AX432", DateTime.Now, 12, "Det var lige godt var"));
-            _varroaRecords.Add(new VarroaCount("AX432", DateTime.Now, 12, "Det var lige godt var"));
+
+            Persistence.LoadCollection(ref _varroaRecords);
+
+
+            //_varroaRecords.Add(new VarroaCount("ASD123",DateTime.Now, 12,"WHAT UP"));
+
         }
 
 
@@ -64,12 +66,17 @@ namespace Biavlere.ViewModels
 
                         /*Logger.addDebtor(newDebtor);*/
                         _varroaRecords.Add(newRecord);
+                        
                     }
-                }));
+                },CanAdd).ObservesProperty(() => VarroaRecords.Count));
             }
         }
 
-        
+        private bool CanAdd()
+        {
+            return ((filename != "") && (VarroaRecords.Count > 0) || _justOpened && VarroaRecords.Count > 0);
+        }
+
 
         public VarroaCount CurrentVarroaCount
         {
@@ -139,19 +146,24 @@ namespace Biavlere.ViewModels
 
         private void SearchCommand_Execute(string bistadId)
         {
-            CanReset = true;
-
-            temp = new List<VarroaCount>(_varroaRecords);
-
-            _varroaRecords.Clear();
-
-            foreach (var varroaCount in temp)
+            if (!_alreadySearched)
             {
-                if (varroaCount.BistadId == bistadId)
+                CanReset = true;
+
+                temp = new List<VarroaCount>(_varroaRecords);
+
+                _varroaRecords.Clear();
+
+                foreach (var varroaCount in temp)
                 {
-                    _varroaRecords.Add(varroaCount);
+                    if (varroaCount.BistadId == bistadId)
+                    {
+                        _varroaRecords.Add(varroaCount);
+                    }
                 }
             }
+
+            _alreadySearched = true;
         }
 
         private ICommand _resetDataGrid;
@@ -168,11 +180,33 @@ namespace Biavlere.ViewModels
         private void ResetDataGridCommand_Execute()
         {
             _varroaRecords.Clear();
-            foreach (var varroaCount in temp)
+            if (!_isSaved)
             {
-                _varroaRecords.Add(varroaCount);
+                foreach (var varroaCount in temp)
+                {
+                    _varroaRecords.Add(varroaCount);
+                }
+            }
+            else
+            {
+                var tempAgents = new ObservableCollection<VarroaCount>();
+
+                XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<VarroaCount>));
+                try
+                {
+                    TextReader reader = new StreamReader(filename);
+
+                    tempAgents = (ObservableCollection<VarroaCount>)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ikke i stand til at loade data - kontakt IT-teknikker", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                VarroaRecords = tempAgents;
             }
 
+            _alreadySearched = false;
             CanReset = false;
         }
 
@@ -197,7 +231,7 @@ namespace Biavlere.ViewModels
 
             if (dlg.ShowDialog() == true)
             {
-
+                _isSaved = true;
             }
         }
 
@@ -205,8 +239,8 @@ namespace Biavlere.ViewModels
 
 
         #region SaveFileCommand
-            
 
+        private bool _isSaved = false;
 
         ICommand _SaveCommand;
         public ICommand SaveCommand
@@ -226,11 +260,12 @@ namespace Biavlere.ViewModels
             // Serialize all the agents.
             serializer.Serialize(writer, VarroaRecords);
             writer.Close();
+            _isSaved = true;
         }
 
         private bool SaveFileCommand_CanExecute()
         {
-            return true; //(filename != "") && (VarroaRecords.Count > 0);
+            return (filename != "") && (VarroaRecords.Count > 0);
         }
 
         #endregion
@@ -258,6 +293,38 @@ namespace Biavlere.ViewModels
 
             }
         }
+
+        #endregion
+
+
+        #region Visualization
+
+        private ICommand _visualizationCommand;
+
+        public ICommand VisualizationCommand
+        {
+            get
+            {
+                return _visualizationCommand ?? (_visualizationCommand = new DelegateCommand(() =>
+                {
+                    var vm = new VisualizationViewModel(ref _varroaRecords);
+                    var dlg = new visualisering()
+                    {
+                        DataContext = vm
+                    };
+                    if (dlg.ShowDialog() == true)
+                    {
+
+                    }
+                }, VisualizeCommand_CanExecute).ObservesProperty(() => VarroaRecords.Count));
+            }
+        }
+
+        private bool VisualizeCommand_CanExecute()
+        {
+            return (VarroaRecords.Count > 0);
+        }
+        
 
         #endregion
 
